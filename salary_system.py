@@ -6,9 +6,23 @@
 import graphics as gr
 SIZE_X = 800
 SIZE_Y = 800
-G = 2000
+G = 1200
 
 window = gr.GraphWin("Model", SIZE_X, SIZE_Y)
+
+
+def move_object(object, cur_coords, target_coords):
+    """Move object to new coords.
+
+        Keyword Args:
+            object -- object that should be moved (object from gr)
+            cur_coords -- current coords of object (Point from gr)
+            target_coords -- target coords (Point from gr)
+
+    """
+    diff_x = target_coords.x - cur_coords.x
+    diff_y = target_coords.y - cur_coords.y
+    object.move(diff_x, diff_y)
 
 
 def add(point_1, point_2):
@@ -97,14 +111,13 @@ def draw_central_gravity_system():
     """
     coords = gr.Point(400, 700)
     velocity = gr.Point(2, 0)
+    circle = draw_circle(coords)
 
-    for i in range(500):
-        clear_window()
-        draw_circle(coords)
-
+    for i in range(10000):
+        new_coords = add(coords, velocity)
+        move_object(circle, coords, new_coords)
         acceleration = update_acceleration(coords, gr.Point(SIZE_X / 2, SIZE_Y / 2))
-
-        coords = add(coords, velocity)
+        coords = new_coords
         velocity = add(velocity, acceleration)
         check_coords(coords, velocity)
 
